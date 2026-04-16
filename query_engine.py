@@ -54,7 +54,7 @@ class GraphQueryEngine:
 
     def get_most_connected_table(self):
         query = """
-        MATCH (n)-[r]-()
+        MATCH (n)-[r]->()
         RETURN coalesce(n.name, n.id, id(n)) AS table, count(r) AS connections
         ORDER BY connections DESC LIMIT 1
         """
@@ -116,3 +116,20 @@ class GraphQueryEngine:
         RETURN coalesce(n.name, n.id, id(n)) AS table
         """
         return self.connector.run_query(query, database=self.database)
+
+    def get_schema_string(self):
+        try:
+            query = "CALL apoc.meta.schema()"
+            result = self.connector.run_query(query, database=self.database)
+            if result:
+                return str(result)
+        except Exception as e:
+            # Fallback if APOC is not available
+            pass
+        
+        # Built-in fallback
+        query = "CALL db.schema.visualization()"
+        result = self.connector.run_query(query, database=self.database)
+        if result:
+            return str(result)
+        return "Schema unavailable."

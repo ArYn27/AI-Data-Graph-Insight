@@ -1,137 +1,125 @@
-# InsightGraph AI
+# 🚀 AI-Data-Graph-Insight
 
-Explainable intelligence layer for relational databases.
+An intelligent, full-stack graph analysis engine. This project transforms raw relational data into meaningful graph insights using a hybrid **Text-to-Cypher AI engine** and an automated **Relational-to-Graph ingestion pipeline**.
 
-InsightGraph AI converts relational database schemas into interactive knowledge graphs, enabling developers to quickly understand complex data structures and relationships. By combining graph modeling with explainable AI, the system generates grounded insights without hallucination and visualizes them through an intuitive interface.
-
----
-
-## Problem
-
-Modern relational databases often lack clear documentation, making it difficult for developers and data teams to understand relationships between tables. Understanding schema structure manually is time-consuming, especially in unfamiliar or legacy systems. Traditional AI tools may generate insights but often lack grounding in real structural relationships, leading to unreliable results.
+Built with **FastAPI**, **Neo4j**, and powered by state-of-the-art LLMs (**Groq Llama 3.3**, **Gemini 2.5 Flash**, or **xAI Grok**).
 
 ---
 
-## Solution
+## 🌟 Key Capabilities
 
-InsightGraph AI connects directly to a Neon Postgres database via URI, automatically extracts schema relationships, and converts them into a knowledge graph using Neo4j. Deterministic graph queries generate structural insights, which are then explained using an AI layer grounded strictly in computed results. The final output is visualized through an interactive graph interface using React Flow.
+### 1. 🧠 Text-to-Cypher AI Engine
+Ask questions about your data in plain English. The engine dynamically:
+- Discovers your database schema.
+- Translates natural language into optimized **Neo4j 5+ Cypher**.
+- Executes the query and provides a conversational summary of the results.
 
----
+### 2. 🔌 SQL-to-Graph Ingestion Pipeline
+Bridge the gap between relational and graph databases.
+- Connect any SQL database (PostgreSQL, MySQL, etc.) via SQLAlchemy.
+- Automatically extract tables, columns, and foreign-key relationships.
+- Instantly reconstruct the relational structure as a high-fidelity graph in Neo4j.
 
-## Key Features
-
-- Direct connection to Neon Postgres database via URI
-- Automatic schema extraction (tables and relationships)
-- Graph-based modeling using Neo4j
-- Interactive visualization using React Flow
-- Explainable AI insights grounded in real data structure
-- Rapid understanding of complex database architectures
-
----
-
-## System Architecture
-
-Neon Postgres → FastAPI → Neo4j Graph → Insight Engine → React Flow Visualization
-
----
-
-## Tech Stack
-
-### Backend
-- FastAPI
-- SQLAlchemy
-- Neo4j
-- Python
-
-### Frontend
-- React
-- React Flow
-- Axios
-
-### Database
-- Neon Postgres
-
-### AI Layer
-- LLM API (for grounded explanations)
+### 3. 🌐 RESTful API for Frontend Integration
+Perfect for React/Next.js/Vue dashboards.
+- Fully CORS-enabled.
+- Auto-generated Swagger documentation at `/docs`.
+- Clean JSON responses for raw graph data and natural language answers.
 
 ---
 
-## Project Structure
+## 🛠 Prerequisites
 
-
-
-
-
-
----
-
-## Workflow
-
-1. User provides Neon database URI
-2. System extracts schema metadata
-3. Schema converted into graph structure
-4. Graph stored in Neo4j
-5. Graph queries generate structural insights
-6. AI explains insights without hallucination
-7. React Flow visualizes graph interactively
+- **Python 3.10+**
+- **Neo4j 5+** (Local or AuraDB)
+- **API Key** (Groq, Gemini, or xAI) OR local **Ollama** setup for AI features.
 
 ---
 
-## Setup Instructions
+## 📦 Installation & Setup
 
-### Clone repository
+1. **Clone & Navigate:**
+   ```bash
+   git clone <repository-url>
+   cd AI-Data-Graph-Insight
+   ```
 
-git clone https://github.com/Aryn27/AI-Data-Graph-Insight
+2. **Initialize Environment:**
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate  # Windows: .venv\Scripts\activate
+   pip install -r requirements.txt
+   ```
 
-cd AI-Data-Graph-Insight
+3. **Configure Settings (`.env`):**
+   ```env
+   # Neo4j Connection
+   NEO4J_URI=neo4j+s://your-instance.databases.neo4j.io
+   NEO4J_USERNAME=neo4j
+   NEO4J_PASSWORD=your-password
+   NEO4J_DATABASE=neo4j
 
----
-
-### Backend setup
-cd backend
-pip install -r requirements.txt
-uvicorn main:app --reload
-
----
-
-### Frontend setup
-cd frontend
-npm install
-npm start
-
-
----
-
-## Branch Strategy
-
-Each team member works on a separate branch:
-
-- frontend-graph-ui
-- backend-schema-extraction
-- backend-neo4j-integration
-- backend-insight-engine
-
-Branches are merged into main after feature completion.
+   # Choose your AI Provider (Prioritized Order)
+   GROQ_API_KEY=your_groq_key_here      # Uses Llama 3.3 70B (Recommended)
+   GEMINI_API_KEY=your_gemini_key_here  # Uses Gemini 2.5 Flash
+   XAI_API_KEY=your_xai_key_here        # Uses Grok 2
+   USE_LOCAL_OLLAMA=true                # Fallback to local Llama3
+   ```
 
 ---
 
-## Future Improvements
+## 🚀 Execution Guide
 
-- row-level relationship insights
-- query optimization recommendations
-- schema improvement suggestions
-- data lineage tracking
-- advanced graph analytics
-- exportable ER diagrams
+### Option 1: The Modern Web API (Recommended)
+This starts the FastAPI server for your React frontend to connect to.
+```bash
+uvicorn api:app --reload --port 8000
+```
+- **Swagger Documentation:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+- **Main Analysis Endpoint:** `POST /api/query`
+
+### Option 2: The Terminal REPL
+For quick data exploration directly in your shell.
+```bash
+python main.py
+```
 
 ---
 
-## Team
+## 📚 API Reference (For React Developers)
 
-BitBox 6.0 Project
+### Analysis Queries
+```javascript
+// Ask the AI anything about your graph
+const getInsights = async (question) => {
+  const res = await fetch("http://127.0.0.1:8000/api/query", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ question: question })
+  });
+  return await res.json();
+};
+```
+
+### SQL Ingestion Pipeline
+1. **Extract Schema:** `POST /api/extract_sql_schema` with `{ "uri": "postgresql://..." }`.
+2. **Build Graph:** `POST /api/build_graph` with the resulting JSON.
 
 ---
 
-## License
+## 🏗 Project Architecture
 
-MIT License
+- **`api.py`**: The FastAPI application and REST endpoints.
+- **`llm_agent.py`**: The AI brains (Text-to-Cypher & Summarization logic).
+- **`sql_extractor.py`**: Relational database inspection via SQLAlchemy.
+- **`graph_builder.py`**: Neo4j population logic.
+- **`query_engine.py`**: Neo4j execution handler & schema discovery.
+- **`main.py`**: Original CLI interactive loop.
+
+---
+
+## 📝 Modern Cypher Standards
+This engine utilizes **Neo4j 5+** standards, prioritizing:
+- `COUNT { ... }` blocks instead of deprecated `size()` on patterns.
+- Explicit `WITH` clauses for complex aggregations.
+- Dynamic schema mapping via `apoc.meta.schema`.
