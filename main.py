@@ -22,7 +22,11 @@ def main():
         intent = classify_question(question)
 
         try:
-            if intent == "count_nodes":
+            if intent == "all_nodes":
+                result = engine.count_all_nodes()
+                print(NaturalLanguageResponder.respond_all_nodes(result))
+
+            elif intent == "count_nodes":
                 label = input("Enter node label: ")
                 result = engine.count_nodes_by_label(label)
                 print(NaturalLanguageResponder.respond_count(label, result))
@@ -41,6 +45,42 @@ def main():
                 node2 = input("Node 2: ")
                 result = engine.find_connections(node1, node2)
                 print(NaturalLanguageResponder.respond_path(node1, node2, result))
+
+            elif intent == "total_relationships":
+                result = engine.get_total_relationships()
+                print(NaturalLanguageResponder.respond_total_relationships(result))
+
+            elif intent == "most_connected_table":
+                result = engine.get_most_connected_table()
+                print(NaturalLanguageResponder.respond_most_connected_table(result))
+
+            elif intent == "isolated_tables":
+                result = engine.get_isolated_tables()
+                print(NaturalLanguageResponder.respond_isolated_tables(result))
+
+            elif intent == "relationship_chains":
+                result = engine.get_relationship_chains()
+                print(NaturalLanguageResponder.respond_relationship_chains(result))
+
+            elif intent == "dependency_depth":
+                result = engine.get_dependency_depth()
+                print(NaturalLanguageResponder.respond_dependency_depth(result))
+
+            elif intent == "schema_complexity":
+                result = engine.get_schema_complexity()
+                print(NaturalLanguageResponder.respond_schema_complexity(result))
+
+            elif intent == "repeated_foreign_keys":
+                result = engine.get_repeated_foreign_keys()
+                print(NaturalLanguageResponder.respond_repeated_foreign_keys(result))
+
+            elif intent == "clusters_of_tables":
+                result = engine.get_clusters_of_tables()
+                print(NaturalLanguageResponder.respond_clusters_of_tables(result))
+
+            elif intent == "root_tables":
+                result = engine.get_root_tables()
+                print(NaturalLanguageResponder.respond_root_tables(result))
 
             elif intent == "custom":
                 query = input("Enter Cypher query: ")
