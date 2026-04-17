@@ -16,6 +16,33 @@ export const apiService = {
     return response.data;
   },
 
+  // Fetch structured JSON schema
+  getStructuredSchema: async () => {
+    const response = await api.get('/api/schema/structured');
+    return response.data;
+  },
+
+  getConnectionInfo: async () => {
+    const response = await api.get('/api/connection_info');
+    return response.data;
+  },
+
+  generateDocumentation: async () => {
+    const response = await api.post('/api/generate_documentation');
+    return response.data;
+  },
+
+  getDocumentation: async () => {
+    const response = await api.get('/api/documentation');
+    return response.data;
+  },
+
+  // Fetch table data
+  getTableData: async (tableName) => {
+    const response = await api.get(`/api/table_data/${tableName}`);
+    return response.data;
+  },
+
   // Submit query for Cypher translation and execution
   submitQuery: async (question) => {
     const response = await api.post('/api/query', { question });
@@ -40,6 +67,22 @@ export const apiService = {
     // For now, we utilize the submitQuery endpoint but we can add a direct one if necessary
     // In this specific backend, we might need to add /api/raw_query
     const response = await api.post('/api/query', { question: `EXECUTE QUERY: ${query}` });
+    return response.data;
+  },
+
+  // Auth Methods
+  login: async (email, password) => {
+    const response = await api.post('/api/auth/login', { email, password });
+    return response.data;
+  },
+
+  signup: async (email, password, name) => {
+    const response = await api.post('/api/auth/signup', { email, password, name });
+    return response.data;
+  },
+
+  getMe: async (token) => {
+    const response = await api.get(`/api/auth/me?token=${token}`);
     return response.data;
   }
 };

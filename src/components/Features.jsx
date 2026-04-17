@@ -37,14 +37,14 @@ const Features = () => {
   ];
 
   return (
-    <section id="features" className="py-32 bg-black overflow-hidden">
+    <section id="features" className="py-32 bg-bg overflow-hidden relative">
       <div className="container mx-auto px-6">
         <div className="max-w-3xl mb-24">
-          <h2 className="text-4xl md:text-5xl font-black mb-6 tracking-tight text-white uppercase italic">
+          <h2 className="text-4xl md:text-5xl font-black mb-6 tracking-tight text-stone-950 uppercase italic">
             Complete Structural <br />
             <span className="text-accent">Intelligence.</span>
           </h2>
-          <p className="text-zinc-500 text-lg md:text-xl font-medium max-w-xl">
+          <p className="text-stone-500 text-lg md:text-xl font-medium max-w-xl">
             From extraction to deterministic intelligence — every layer of your database, visualized and explained.
           </p>
         </div>
@@ -57,13 +57,13 @@ const Features = () => {
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1 }}
               key={idx} 
-              className="group bg-panel/30 border border-border/50 p-10 rounded-3xl hover:border-accent/30 hover:bg-panel transition-all duration-500"
+              className="group bg-white border border-border p-10 rounded-3xl hover:border-accent hover:shadow-xl hover:shadow-accent/5 transition-all duration-500"
             >
-              <div className="w-16 h-16 bg-zinc-900 rounded-2xl flex items-center justify-center text-accent mb-8 group-hover:scale-110 transition-transform shadow-inner">
+              <div className="w-16 h-16 bg-stone-50 rounded-2xl flex items-center justify-center text-accent mb-8 group-hover:scale-110 transition-transform border border-border/50">
                 {feature.icon}
               </div>
-              <h3 className="text-xl font-black mb-4 tracking-tight group-hover:text-accent transition-colors uppercase">{feature.title}</h3>
-              <p className="text-zinc-500 leading-relaxed font-medium">{feature.desc}</p>
+              <h3 className="text-xl font-black mb-4 tracking-tight text-stone-950 group-hover:text-accent transition-colors uppercase">{feature.title}</h3>
+              <p className="text-stone-500 leading-relaxed font-medium">{feature.desc}</p>
             </motion.div>
           ))}
         </div>

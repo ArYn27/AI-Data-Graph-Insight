@@ -39,3 +39,24 @@ def extract_schema(db_uri: str):
     except Exception as e:
         logging.error(f"Error extracting SQL schema: {e}")
         raise e
+
+def fetch_table_rows(db_uri: str, table_name: str, limit: int = 50):
+    """
+    Fetches the first N rows from a specific SQL table.
+    """
+    try:
+        from sqlalchemy import text
+        engine = create_engine(db_uri)
+        with engine.connect() as connection:
+            # Use text() for safe query execution
+            query = text(f"SELECT * FROM {table_name} LIMIT {limit}")
+            result = connection.execute(query)
+            
+            rows = []
+            for row in result:
+                # Convert Row object to dict
+                rows.append(row._asdict())
+            return rows
+    except Exception as e:
+        logging.error(f"Error fetching rows from table {table_name}: {e}")
+        raise e

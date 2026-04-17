@@ -15,4 +15,4 @@ class Neo4jConnector:
                 return [record.data() for record in result]
         except Exception as e:
             logging.error(f"Query failed: {e}")
-            return None
+            raise e

@@ -4,21 +4,21 @@ import { Server, Layout, Database, Sparkles, Cpu, Shield } from 'lucide-react';
 
 const TechStack = () => {
   return (
-    <section id="architecture" className="py-32 bg-black relative">
+    <section id="architecture" className="py-32 bg-bg relative">
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
           <div className="max-w-xl">
-             <h2 className="text-4xl md:text-5xl font-black mb-6 tracking-tight text-white uppercase italic">
+             <h2 className="text-4xl md:text-5xl font-black mb-6 tracking-tight text-stone-950 uppercase italic">
               System <br />
               <span className="text-accent">Architecture.</span>
             </h2>
-            <p className="text-zinc-500 text-lg font-medium">Built with a deterministic, scalable stack to ensure data integrity and grounded AI insights.</p>
+            <p className="text-stone-500 text-lg font-medium">Built with a deterministic, scalable stack to ensure data integrity and grounded AI insights.</p>
           </div>
           <div className="flex gap-4">
-             <div className="px-6 py-3 bg-zinc-900 border border-border rounded-xl text-[10px] font-black uppercase tracking-[0.2em] text-accent">
+             <div className="px-6 py-3 bg-white border border-border rounded-xl text-[10px] font-black uppercase tracking-[0.2em] text-accent">
                 Production Ready
              </div>
-             <div className="px-6 py-3 bg-zinc-900 border border-border rounded-xl text-[10px] font-black uppercase tracking-[0.2em] text-white">
+             <div className="px-6 py-3 bg-white border border-border rounded-xl text-[10px] font-black uppercase tracking-[0.2em] text-stone-950">
                 V2.8-Flash
              </div>
           </div>
@@ -57,28 +57,28 @@ const TechStack = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1 }}
-              className="bg-panel border border-border p-8 rounded-3xl hover:bg-zinc-900 transition-colors group"
+              className="bg-white border border-border p-8 rounded-3xl hover:bg-stone-50 transition-colors group"
             >
               <div className={`mb-6 ${item.color} group-hover:scale-110 transition-transform duration-300`}>
                 <item.icon size={32} />
               </div>
-              <h3 className="text-lg font-bold mb-3 text-white uppercase tracking-tight">{item.title}</h3>
-              <p className="text-zinc-500 text-sm leading-relaxed font-medium">{item.desc}</p>
+              <h3 className="text-lg font-bold mb-3 text-stone-950 uppercase tracking-tight">{item.title}</h3>
+              <p className="text-stone-500 text-sm leading-relaxed font-medium">{item.desc}</p>
             </motion.div>
           ))}
         </div>
 
-        <div className="mt-20 border border-accent/20 bg-accent/[0.02] p-8 rounded-[2rem] flex flex-col md:flex-row items-center justify-between gap-8">
+        <div className="mt-20 border border-accent/20 bg-accent/[0.05] p-8 rounded-[2rem] flex flex-col md:flex-row items-center justify-between gap-8 backdrop-blur-sm">
            <div className="flex items-center gap-6">
-              <div className="w-16 h-16 bg-accent border border-black rounded-2xl flex items-center justify-center text-black shadow-[0_0_20px_rgba(11,221,117,0.4)]">
+              <div className="w-16 h-16 bg-accent border border-white/20 rounded-2xl flex items-center justify-center text-white shadow-[0_0_20px_rgba(188,158,130,0.3)]">
                  <Shield size={32} />
               </div>
               <div>
-                 <h4 className="text-xl font-black text-white uppercase italic tracking-tight">Enterprise Compliance</h4>
-                 <p className="text-zinc-500 text-sm font-medium uppercase tracking-widest">End-to-End Encryption & RBAC Ready</p>
+                 <h4 className="text-xl font-black text-stone-950 uppercase italic tracking-tight">Enterprise Compliance</h4>
+                 <p className="text-stone-500 text-sm font-medium uppercase tracking-widest">End-to-End Encryption & RBAC Ready</p>
               </div>
            </div>
-           <button className="px-8 py-4 bg-white text-black font-black rounded-xl text-xs uppercase tracking-widest hover:bg-accent transition-colors shadow-xl">
+           <button className="px-8 py-4 bg-stone-950 text-white font-black rounded-xl text-xs uppercase tracking-widest hover:bg-accent hover:text-white transition-all shadow-xl active:scale-95">
               Download Security Whitepaper
            </button>
         </div>

@@ -40,7 +40,7 @@ class LLMAgent:
     def is_active(self):
         return self.endpoint is not None
 
-    def _call_llm(self, system_prompt, user_prompt, temperature=0.0):
+    def _call_llm(self, system_prompt, user_prompt, temperature=0.0, max_tokens=2048):
         if not self.is_active():
             logging.error("No active LLM configuration.")
             return None
@@ -64,7 +64,8 @@ class LLMAgent:
             ],
             "model": self.model,
             "stream": False,
-            "temperature": temperature
+            "temperature": temperature,
+            "max_tokens": max_tokens
         }
 
         req = urllib.request.Request(
@@ -128,3 +129,38 @@ class LLMAgent:
         )
         
         return self._call_llm(system_prompt, user_prompt, temperature=0.3)
+
+    def generate_table_documentation(self, table_name, table_schema, pertinent_relationships):
+        system_prompt = (
+            "You are a Senior Technical Architect and Database Documentarian. "
+            "Your task is to analyze the provided SQL table schema and generate professional documentation. "
+            "Output MUST be a valid JSON object (no array, just the object for this table) containing: \n"
+            "1. 'overview': A 2-3 sentence description of the table's purpose.\n"
+            "2. 'schema_summary': A brief object with 'total_fields', 'pk', 'fk', and 'relationships_count'.\n"
+            "3. 'fields': An array of objects each with 'name', 'type', 'nullable', 'key_type', and 'description'.\n"
+            "4. 'relationships': An array of strings describing FK relationships.\n\n"
+            "Respond ONLY with the JSON object. No conversational filler or markdown markers."
+        )
+        user_prompt = (
+            f"Table Name: {table_name}\n"
+            f"Columns: {json.dumps(table_schema, indent=2)}\n"
+            f"Relationships: {json.dumps(pertinent_relationships, indent=2)}"
+        )
+        
+        response = self._call_llm(system_prompt, user_prompt, temperature=0.2, max_tokens=2048)
+        
+        # Clean up any potential markdown or conversational filler
+        if response:
+            start_idx = response.find('{')
+            end_idx = response.rfind('}')
+            if start_idx != -1 and end_idx != -1:
+                response = response[start_idx:end_idx + 1].strip()
+                
+            if response.startswith("```json"):
+                response = response[len("```json"):].strip()
+            if response.startswith("```"):
+                response = response[len("```"):].strip()
+            if response.endswith("```"):
+                response = response[:-len("```")].strip()
+                
+        return response

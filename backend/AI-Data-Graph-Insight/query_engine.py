@@ -117,6 +117,51 @@ class GraphQueryEngine:
         """
         return self.connector.run_query(query, database=self.database)
 
+    def get_structured_schema(self):
+        """Returns a structured representation of the graph schema (Tables and Columns)."""
+        try:
+            # 1. Fetch all Table nodes and their associated Column count/names
+            nodes = []
+            tables_res = self.connector.run_query("""
+                MATCH (t:Table)
+                OPTIONAL MATCH (t)-[:HAS_COLUMN]->(c:Column)
+                RETURN t.name AS name, collect(c.name) AS columns, count(c) AS col_count
+            """, database=self.database)
+            
+            if tables_res:
+                for r in tables_res:
+                    nodes.append({
+                        "name": r['name'],
+                        "properties": r['columns'],
+                        "count": r['col_count']
+                    })
+
+            # 2. Fetch all Relationships between Tables
+            relationships = []
+            rels_res = self.connector.run_query("""
+                MATCH (a:Table)-[r:REFERENCES]->(b:Table)
+                RETURN a.name AS source, type(r) AS type, b.name AS target, 
+                       r.from_column AS from_col, r.to_column AS to_col
+            """, database=self.database)
+            
+            if rels_res:
+                for r in rels_res:
+                    relationships.append({
+                        "source": r['source'],
+                        "type": r['type'],
+                        "target": r['target'],
+                        "from_col": r['from_col'],
+                        "to_col": r['to_col']
+                    })
+
+            return {
+                "nodes": nodes,
+                "relationships": relationships
+            }
+        except Exception as e:
+            logging.error(f"Error in get_structured_schema: {e}")
+            return {"error": str(e)}
+
     def get_schema_string(self):
         schema_parts = []
         
