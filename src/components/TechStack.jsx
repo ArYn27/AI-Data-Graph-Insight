@@ -68,20 +68,6 @@ const TechStack = () => {
           ))}
         </div>
 
-        <div className="mt-20 border border-accent/20 bg-accent/[0.05] p-8 rounded-[2rem] flex flex-col md:flex-row items-center justify-between gap-8 backdrop-blur-sm">
-           <div className="flex items-center gap-6">
-              <div className="w-16 h-16 bg-accent border border-white/20 rounded-2xl flex items-center justify-center text-white shadow-[0_0_20px_rgba(188,158,130,0.3)]">
-                 <Shield size={32} />
-              </div>
-              <div>
-                 <h4 className="text-xl font-black text-stone-950 uppercase italic tracking-tight">Enterprise Compliance</h4>
-                 <p className="text-stone-500 text-sm font-medium uppercase tracking-widest">End-to-End Encryption & RBAC Ready</p>
-              </div>
-           </div>
-           <button className="px-8 py-4 bg-stone-950 text-white font-black rounded-xl text-xs uppercase tracking-widest hover:bg-accent hover:text-white transition-all shadow-xl active:scale-95">
-              Download Security Whitepaper
-           </button>
-        </div>
       </div>
     </section>
   );

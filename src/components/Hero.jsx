@@ -19,9 +19,6 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <span className="inline-block px-4 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-[10px] font-bold uppercase tracking-[0.3em] mb-8">
-              Available Now: V2.8 Neural Core
-            </span>
             <h1 className="text-6xl md:text-8xl font-black mb-10 tracking-tighter leading-[0.9] text-stone-950">
               Understand your data <br />
               <span className="text-accent italic">at the speed of thought.</span>
