@@ -4,24 +4,27 @@ import { Database } from 'lucide-react';
 
 const Navbar = () => {
   return (
-    <nav className="container" style={{ position: 'relative', zIndex: 10 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem 0' }}>
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 'bold', fontSize: '1.25rem', textDecoration: 'none', color: 'inherit' }}>
-          <Database className="text-accent" size={24} />
-          <span>InsightGraph AI</span>
+    <nav className="fixed top-0 left-0 right-0 z-[100] bg-white/80 backdrop-blur-md border-b border-stone-200">
+      <div className="container mx-auto px-6 h-20 flex justify-between items-center">
+        <Link to="/" className="flex items-center gap-3 group">
+          <div className="w-10 h-10 bg-accent/20 rounded-xl flex items-center justify-center text-accent group-hover:scale-110 transition-transform">
+            <Database size={24} />
+          </div>
+          <span className="font-bold text-xl tracking-tight text-stone-950">InsightGraph <span className="text-accent">AI</span></span>
         </Link>
         
-        <div style={{ display: 'flex', gap: '2rem', color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
-          <a href="#features" style={{ color: 'inherit', textDecoration: 'none' }}>Features</a>
-          <a href="#how-it-works" style={{ color: 'inherit', textDecoration: 'none' }}>How It Works</a>
+        <div className="hidden md:flex items-center gap-10">
+          <a href="#features" className="text-sm font-medium text-stone-600 hover:text-accent transition-colors">Features</a>
+          <a href="#how-it-works" className="text-sm font-medium text-stone-600 hover:text-accent transition-colors">Workflow</a>
+          <a href="#architecture" className="text-sm font-medium text-stone-600 hover:text-accent transition-colors">Architecture</a>
         </div>
         
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-          <Link to="/auth" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontWeight: 500 }}>
-            Log In
+        <div className="flex items-center gap-4">
+          <Link to="/auth" className="text-sm font-medium text-stone-500 hover:text-stone-900 transition-colors px-4">
+            Sign In
           </Link>
-          <Link to="/auth" className="btn btn-primary" style={{ padding: '0.5rem 1.25rem', fontSize: '0.9rem', textDecoration: 'none' }}>
-            Start Free
+          <Link to="/auth" className="btn-primary px-6 py-2.5 text-sm shadow-md shadow-accent/10 whitespace-nowrap">
+            Start Building
           </Link>
         </div>
       </div>

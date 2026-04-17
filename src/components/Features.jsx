@@ -1,55 +1,72 @@
 import React from 'react';
-import { Network, Database, Brain, Search, LayoutTemplate, ShieldCheck } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Network, Database, LayoutTemplate, Brain, Search, ShieldCheck } from 'lucide-react';
 
 const Features = () => {
   const features = [
     {
       icon: <Network size={24} />,
-      title: "Automatic Schema Extraction",
-      desc: "Connect directly via URI to extract tables, columns, and relationships automatically without manual effort."
+      title: "Neural Schema Translation",
+      desc: "Connect directly via URI to extract tables, columns, and relationships automatically with zero manual tagging."
     },
     {
       icon: <Database size={24} />,
-      title: "Direct Neon Postgres Connection",
-      desc: "Native integration with Neon Postgres for seamless, fast reliable connectivity and real-time insights."
+      title: "Neon Postgres Native",
+      desc: "Deep integration with Neon Postgres for real-time metadata syncing and high-performance relational mapping."
     },
     {
       icon: <LayoutTemplate size={24} />,
-      title: "Graph-Based Modeling",
-      desc: "Convert relational structures into an intuitive graph model using Neo4j to visualize complex dependencies."
+      title: "Knowledge Graph Engine",
+      desc: "Advanced transformation logic converts tabular structures into intuitive Neo4j graph nodes and properties."
     },
     {
       icon: <Brain size={24} />,
-      title: "Explainable AI Insights",
-      desc: "Contextual, plain-language explanations of your schema structure, rooted firmly in real metadata with no hallucinations."
+      title: "Deterministic AI Layer",
+      desc: "Contextual, logic-grounded explanations of your data architecture. No hallucinations, just pure structured facts."
     },
     {
       icon: <Search size={24} />,
-      title: "Interactive Visualization",
-      desc: "Explore your database architectures mapped using React Flow, making database navigation visual and intuitive."
+      title: "Dynamic Flow Analysis",
+      desc: "Explore every branch of your database architecture with an interactive React Flow canvas built for speed."
     },
     {
       icon: <ShieldCheck size={24} />,
-      title: "Reliable Accuracy",
-      desc: "Insights generated are derived strictly from deterministic graph queries, ensuring high confidence in AI outputs."
+      title: "Enterprise Data Trust",
+      desc: "Every automated insight is derived from verified structural constraints, ensuring absolute data integrity."
     }
   ];
 
   return (
-    <section id="features" className="container" style={{ paddingTop: '4rem' }}>
-      <div className="section-header">
-        <h2>Everything you need.</h2>
-        <p>From extraction to intelligence — one intelligent layer.</p>
-      </div>
-      
-      <div className="features-grid">
-        {features.map((feature, idx) => (
-          <div key={idx} className="feature-card">
-            <div className="feature-icon">{feature.icon}</div>
-            <h3 className="feature-title">{feature.title}</h3>
-            <p className="feature-desc">{feature.desc}</p>
-          </div>
-        ))}
+    <section id="features" className="py-32 bg-black overflow-hidden">
+      <div className="container mx-auto px-6">
+        <div className="max-w-3xl mb-24">
+          <h2 className="text-4xl md:text-5xl font-black mb-6 tracking-tight text-white uppercase italic">
+            Complete Structural <br />
+            <span className="text-accent">Intelligence.</span>
+          </h2>
+          <p className="text-zinc-500 text-lg md:text-xl font-medium max-w-xl">
+            From extraction to deterministic intelligence — every layer of your database, visualized and explained.
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {features.map((feature, idx) => (
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.1 }}
+              key={idx} 
+              className="group bg-panel/30 border border-border/50 p-10 rounded-3xl hover:border-accent/30 hover:bg-panel transition-all duration-500"
+            >
+              <div className="w-16 h-16 bg-zinc-900 rounded-2xl flex items-center justify-center text-accent mb-8 group-hover:scale-110 transition-transform shadow-inner">
+                {feature.icon}
+              </div>
+              <h3 className="text-xl font-black mb-4 tracking-tight group-hover:text-accent transition-colors uppercase">{feature.title}</h3>
+              <p className="text-zinc-500 leading-relaxed font-medium">{feature.desc}</p>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   );

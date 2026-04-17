@@ -1,174 +1,91 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Play, ShieldAlert, CheckCircle2, Copy, Download, Trash2, Database, Code } from 'lucide-react';
-import { apiService } from '../../services/api';
+import { Database, ChevronRight, Sparkles, GitFork } from 'lucide-react';
 
 const QueryRunner = () => {
-  const [query, setQuery] = useState('SELECT * FROM olist_customers_dataset LIMIT 10;');
-  const [results, setResults] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [securityWarning, setSecurityWarning] = useState(null);
-
-  const validateQuery = (q) => {
-    const forbidden = [
-      'update', 'delete', 'drop', 'insert', 'create', 'alter', 'truncate', 
-      'set', 'remove', 'merge', 'grant', 'revoke'
-    ];
-    
-    const words = q.toLowerCase().split(/\s+/);
-    const found = words.find(w => forbidden.includes(w));
-    
-    if (found) {
-      return `Operation "${found.toUpperCase()}" is restricted. Only read-only queries are allowed in this environment.`;
-    }
-    return null;
-  };
-
-  const handleRunQuery = async () => {
-    setError(null);
-    setSecurityWarning(null);
-    
-    const warning = validateQuery(query);
-    if (warning) {
-      setSecurityWarning(warning);
-      return;
-    }
-
-    setLoading(true);
-    try {
-      // Use the submitQuery logic which translates natural language or handles direct queries if backend supports
-      // Since it's a "Query Runner", we might want to pass it as a special "question"
-      const response = await apiService.submitQuery(query);
-      if (response.success) {
-        setResults(response.raw_data);
-      } else {
-        setError("Failed to execute query.");
-      }
-    } catch (err) {
-      setError(err.response?.data?.detail || err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const clearResults = () => {
-    setResults(null);
-    setError(null);
-    setSecurityWarning(null);
-  };
+  const [query, setQuery] = useState(`SELECT 
+    oi.order_id,
+    oi.product_id,
+    oi.seller_id,
+    oi.price,
+    s.seller_city,
+    op.payment_type
+FROM olist_order_items_dataset oi
+JOIN olist_sellers_dataset s ON oi.seller_id = s.seller_id
+LEFT JOIN olist_order_payments_dataset op ON oi.order_id = op.order_id
+LIMIT 10;`);
+  const [activeTab, setActiveTab] = useState('impact');
 
   return (
-    <div className="query-container">
-      <div className="flex justify-between items-center bg-zinc-900 border border-zinc-800 p-4 rounded-xl">
+    <div className="h-full flex flex-col space-y-6">
+      <header className="flex justify-between items-center text-stone-900">
+        <div>
+          <div className="flex items-center gap-3 mb-2">
+            <h2 className="text-3xl font-bold tracking-tight text-stone-900">SQL Lab</h2>
+            <span className="text-[10px] bg-accent/20 text-accent px-2 py-0.5 rounded font-bold uppercase tracking-widest border border-accent/20">AI Enhanced</span>
+          </div>
+          <p className="text-stone-500 text-sm">Run queries with automated graph impact analysis.</p>
+        </div>
+        
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 text-zinc-400">
-            <Database size={16} />
-            <select className="bg-transparent border-none text-zinc-300 text-sm font-semibold focus:outline-none">
-              <option>Demo Ecommerce (Neon)</option>
-              <option>Neo4j Graph (Internal)</option>
-            </select>
-          </div>
-          <div className="w-[1px] h-4 bg-zinc-800"></div>
-          <div className="flex items-center gap-2 text-zinc-400">
-            <Code size={16} />
-            <span className="text-zinc-300 text-sm font-semibold lowercase">SQL / Cypher</span>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <button 
-            className="flex items-center gap-2 px-4 py-2 bg-accent text-black rounded-lg font-bold text-sm hover:bg-accent-hover transition-all disabled:opacity-50"
-            onClick={handleRunQuery}
-            disabled={loading}
-          >
-            {loading ? (
-              <div className="animate-spin h-4 w-4 border-2 border-black border-t-transparent rounded-full" />
-            ) : (
-              <Play size={16} fill="black" />
-            )}
-            Run Query
-          </button>
-          <button className="p-2 text-zinc-500 hover:text-white" onClick={clearResults}>
-            <Trash2 size={18} />
-          </button>
-        </div>
-      </div>
-
-      <div className="relative">
-        <textarea 
-          className="query-editor w-full"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          spellCheck="false"
-        />
-        {securityWarning && (
-          <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="absolute bottom-4 left-4 right-4 bg-red-500/10 border border-red-500/20 p-3 rounded-lg flex items-start gap-3 text-red-400 text-sm"
-          >
-            <ShieldAlert size={18} className="shrink-0" />
-            <p>{securityWarning}</p>
-          </motion.div>
-        )}
-      </div>
-
-      <div className="results-section flex-1 min-h-[300px]">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-widest">Query Results</h3>
-          {results && (
-            <div className="flex gap-2">
-              <button className="flex items-center gap-1.5 px-3 py-1.5 bg-zinc-900 border border-zinc-800 rounded-lg text-xs font-semibold hover:bg-zinc-800">
-                <Copy size={14} /> Copy JSON
-              </button>
-              <button className="flex items-center gap-1.5 px-3 py-1.5 bg-zinc-900 border border-zinc-800 rounded-lg text-xs font-semibold hover:bg-zinc-800">
-                <Download size={14} /> CSV
-              </button>
-            </div>
-          )}
-        </div>
-
-        {loading ? (
-          <div className="h-full flex flex-col items-center justify-center text-zinc-500 gap-4">
-            <div className="animate-spin h-8 w-8 border-4 border-accent border-t-transparent rounded-full" />
-            <p className="text-sm font-medium">Executing on cluster...</p>
-          </div>
-        ) : error ? (
-          <div className="h-full border border-red-500/20 bg-red-500/5 rounded-xl p-8 flex flex-col items-center justify-center text-red-400 text-center gap-2">
-             <ShieldAlert size={32} />
-             <h4 className="font-bold">Execution Error</h4>
-             <p className="text-sm max-w-md">{error}</p>
-          </div>
-        ) : results ? (
-          <div className="results-table-container">
-            <table className="results-table">
-              <thead>
-                <tr>
-                  {Object.keys(results[0] || {}).map(key => (
-                    <th key={key}>{key}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {results.map((row, i) => (
-                  <tr key={i}>
-                    {Object.values(row).map((val, j) => (
-                      <td key={j}>{typeof val === 'object' ? JSON.stringify(val) : String(val)}</td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <div className="h-full border border-dashed border-zinc-800 rounded-xl flex flex-col items-center justify-center text-zinc-500 gap-3">
-             <div className="p-4 bg-zinc-900 rounded-full">
-                <CheckCircle2 size={32} className="text-zinc-700" />
+          <div className="bg-panel border border-border px-4 py-2 rounded-xl flex items-center gap-6 text-sm shadow-sm">
+             <div className="flex items-center gap-2 text-orange-600 font-bold">
+               <Database size={16} />
+               <span>Demo eCommerce DB</span>
+               <ChevronRight size={14} className="rotate-90 text-stone-400" />
              </div>
-             <p className="text-sm">Ready to execute query.</p>
           </div>
-        )}
+          <button className="btn-primary flex items-center gap-2 h-[46px] px-8">
+            <Sparkles size={18} />
+            Analyze & Run
+          </button>
+        </div>
+      </header>
+
+      <div className="flex-1 flex gap-6 min-h-[500px]">
+        {/* Editor Side */}
+        <div className="flex-[1.5] flex flex-col gap-6">
+           <div className="flex-1 bg-stone-50 border border-border rounded-2xl p-6 font-mono text-sm relative overflow-hidden group shadow-inner">
+              <div className="absolute top-4 left-4 text-stone-400 font-bold uppercase tracking-widest text-[10px]">Editor</div>
+              <textarea 
+                className="w-full h-full bg-transparent border-none outline-none text-stone-800 resize-none pt-10 scroll-hide leading-relaxed"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                spellCheck="false"
+              />
+              <div className="absolute inset-0 pointer-events-none border border-accent/0 group-focus-within:border-accent/30 transition-all rounded-2xl" />
+           </div>
+           
+           <div className="h-48 bg-panel border border-border rounded-2xl p-6 flex flex-col items-center justify-center text-stone-400 gap-4 shadow-sm">
+              <Database size={32} className="opacity-10" />
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em]">Result Set Empty</span>
+           </div>
+        </div>
+
+        {/* Impact Analysis Side */}
+        <div className="flex-1 bg-panel border border-border rounded-2xl overflow-hidden flex flex-col shadow-sm">
+           <div className="flex border-b border-border">
+              {['impact', 'quality', 'execution'].map((tab) => (
+                <button 
+                   key={tab}
+                   onClick={() => setActiveTab(tab)}
+                   className={`flex-1 py-4 text-[10px] font-bold uppercase tracking-widest transition-all ${activeTab === tab ? 'text-accent border-b-2 border-accent bg-accent/5' : 'text-stone-400 hover:text-stone-900'}`}
+                >
+                  {tab === 'impact' ? 'Impact Analysis' : tab === 'quality' ? 'Data Quality' : 'Execution'}
+                </button>
+              ))}
+           </div>
+
+           <div className="p-8 flex-1 flex flex-col">
+              <h3 className="text-xs font-bold text-accent uppercase tracking-[0.2em] mb-8">Graph Relationship Depth</h3>
+              <div className="flex-1 flex flex-col items-center justify-center text-center space-y-6 opacity-30">
+                 <GitFork size={48} className="text-stone-300" />
+                 <div>
+                    <p className="text-sm font-bold text-stone-900 mb-1 uppercase tracking-widest">Execute query to see</p>
+                    <p className="text-[10px] font-bold text-stone-400 uppercase tracking-widest">Graph Relationship Depth</p>
+                 </div>
+              </div>
+           </div>
+        </div>
       </div>
     </div>
   );

@@ -1,77 +1,60 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Search, Filter, ExternalLink, ChevronRight, Table as TableIcon, PlusCircle, ShieldCheck } from 'lucide-react';
+import { Search, Filter, ExternalLink, ChevronRight, Table as TableIcon, PlusCircle, ShieldCheck, Database } from 'lucide-react';
 import { apiService } from '../../services/api';
 
 const TablesExplorer = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [loading, setLoading] = useState(false);
   
-  // Mock data representing what we might get from apiService.getSchema()
-  // In a real app, we would parse the schema string or use a structured endpoint
-  const [tables, setTables] = useState([
-    { name: 'olist_customers_dataset', type: 'POSTGRESQL', status: 'Healthy', columns: 5 },
-    { name: 'olist_orders_dataset', type: 'POSTGRESQL', status: 'Healthy', columns: 8 },
-    { name: 'olist_products_dataset', type: 'POSTGRESQL', status: 'Healthy', columns: 9 },
-    { name: 'olist_order_items_dataset', type: 'POSTGRESQL', status: 'Healthy', columns: 7 },
+  const [tables] = useState([
+    { name: 'Demo eCommerce Database', type: 'POSTGRESQL', provider: 'NEON', status: 'Encrypted', iconColor: 'text-orange-600' },
   ]);
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold">Data Sources</h2>
-        <button className="btn btn-primary text-sm py-2 flex items-center gap-2">
-          <PlusCircle size={16} /> Add Connection
-        </button>
+    <div className="space-y-12">
+      <div>
+        <h2 className="text-3xl font-bold mb-2 tracking-tight text-stone-900">Data Sources</h2>
+        <p className="text-stone-500 text-lg">Manage your connected enterprise databases.</p>
       </div>
 
-      <div className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500" size={18} />
+      <div className="relative max-w-md">
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400" size={18} />
         <input 
           type="text" 
           placeholder="Search by name or provider..." 
-          className="w-full bg-zinc-900 border border-zinc-800 rounded-xl py-3 pl-12 pr-4 focus:border-accent outline-none"
+          className="w-full bg-white border border-border rounded-xl py-3 pl-12 pr-4 focus:border-accent outline-none text-sm font-medium transition-all shadow-sm"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
 
-      <div className="grid grid-cols-1 gap-4">
-        {tables.map((table, i) => (
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: i * 0.1 }}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {tables.map((table) => (
+          <div 
             key={table.name}
-            className="group bg-zinc-900/40 border border-zinc-800 rounded-2xl p-6 hover:bg-zinc-800/40 transition-all cursor-pointer"
+            className="bg-panel border border-border hover:border-accent/40 rounded-3xl p-8 flex flex-col transition-all group shadow-sm hover:shadow-md"
           >
-            <div className="flex justify-between items-center">
-              <div className="flex items-center gap-4">
-                <div className="p-3 bg-zinc-800 rounded-xl text-yellow-500">
-                  <TableIcon size={24} />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-bold text-lg">{table.name}</h3>
-                    <span className="text-[10px] bg-orange-500/10 text-orange-500 px-2 py-0.5 rounded font-bold uppercase tracking-wider">Demo</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-xs text-zinc-500 font-semibold uppercase tracking-wider">
-                    <span className="flex items-center gap-1">
-                      {table.type} (NEON)
-                    </span>
-                    <span className="w-1 h-1 bg-zinc-700 rounded-full"></span>
-                    <span className="text-accent flex items-center gap-1">
-                      <ShieldCheck size={12} /> Encrypted
-                    </span>
-                  </div>
-                </div>
-              </div>
-              
-              <button className="btn btn-secondary py-2 px-4 text-xs font-bold flex items-center gap-2 group-hover:bg-zinc-700">
-                Explore Schema <ExternalLink size={14} />
-              </button>
+            <div className="mb-8 p-3 bg-bg w-fit rounded-2xl shadow-inner border border-border/50">
+               <Database size={28} className={table.iconColor} />
             </div>
-          </motion.div>
+            
+            <div className="mb-8">
+              <div className="flex items-center gap-2 mb-3">
+                <h3 className="font-bold text-xl tracking-tight text-stone-900">{table.name}</h3>
+                <span className="text-[10px] bg-orange-600 text-white px-2 py-0.5 rounded font-black uppercase tracking-wider">Demo</span>
+              </div>
+              <div className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest text-stone-500">
+                <span className="px-2 py-1 bg-bg rounded border border-border">{table.type} ({table.provider})</span>
+                <span className="text-accent flex items-center gap-1.5 px-2 py-1 bg-accent/5 rounded border border-accent/10">
+                  <ShieldCheck size={14} /> {table.status}
+                </span>
+              </div>
+            </div>
+
+            <button className="w-full bg-stone-100 border border-border text-stone-900 font-bold py-3 px-6 rounded-2xl flex items-center justify-center gap-2 hover:bg-stone-200 transition-all text-sm group-hover:border-stone-300 cursor-pointer">
+              Explore Schema <ExternalLink size={16} />
+            </button>
+          </div>
         ))}
       </div>
     </div>

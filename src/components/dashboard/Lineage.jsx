@@ -135,19 +135,13 @@ const Lineage = () => {
   );
 
   return (
-    <div className="space-y-6 flex flex-col h-full">
-      <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-xl font-bold">Data Lineage</h2>
-          <p className="text-zinc-500 text-sm">Viewing demo database lineage.</p>
-        </div>
-        <div className="flex gap-2">
-           <button className="btn btn-secondary py-1.5 px-3 text-xs">Export PDF</button>
-           <button className="btn btn-primary py-1.5 px-3 text-xs">Refresh Graph</button>
-        </div>
-      </div>
+    <div className="space-y-10 flex flex-col h-full">
+      <header>
+        <h2 className="text-3xl font-bold mb-2 tracking-tight">Data Lineage</h2>
+        <p className="text-zinc-500 text-lg">Viewing demo database lineage.</p>
+      </header>
 
-      <div className="flex-1 bg-zinc-900/30 border border-zinc-800 rounded-3xl overflow-hidden relative min-h-[600px]">
+      <div className="flex-1 bg-panel/30 border border-border rounded-3xl overflow-hidden relative min-h-[600px] shadow-inner">
         <ReactFlow
           nodes={nodes}
           edges={edges}
@@ -156,12 +150,12 @@ const Lineage = () => {
           onConnect={onConnect}
           fitView
         >
-          <Background color="#1px" gap={20} />
-          <Controls />
+          <Background color="#1d1d21" gap={20} size={1} />
+          <Controls className="bg-panel border border-border text-white fill-white" />
           <MiniMap 
-            style={{ background: '#0a0a0a' }} 
-            nodeColor="#111"
-            maskColor="rgba(0,0,0,0.5)"
+            style={{ background: '#0a0a0a', border: '1px solid #1d1d21' }} 
+            nodeColor="#222"
+            maskColor="rgba(0,0,0,0.7)"
           />
         </ReactFlow>
       </div>

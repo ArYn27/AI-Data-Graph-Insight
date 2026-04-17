@@ -39,53 +39,56 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="dashboard-layout">
+    <div className="flex h-screen bg-bg text-stone-900 overflow-hidden">
       {/* Sidebar */}
-      <aside className={`sidebar ${!sidebarOpen ? 'collapsed' : ''}`}>
-        <div className="sidebar-logo">
-          <Database className="text-accent" size={28} />
-          <span>DataLens AI</span>
+      <aside className="w-64 bg-sidebar border-r border-border flex flex-col p-6">
+        <div className="flex items-center gap-2 mb-12 px-2">
+          <Database className="text-accent" size={24} />
+          <span className="font-bold text-lg tracking-tight text-stone-950">DataLens AI</span>
         </div>
 
-        <nav className="nav-links">
+        <nav className="flex-1 space-y-2">
           {navItems.map((item) => (
             <NavLink 
               key={item.path} 
               to={`/dashboard/${item.path}`} 
-              className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+              className={({ isActive }) => `
+                flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-bold text-sm
+                ${isActive ? 'bg-accent text-white shadow-md shadow-accent/20' : 'text-stone-500 hover:text-stone-900 hover:bg-stone-100'}
+              `}
             >
-              <item.icon size={20} />
-              {sidebarOpen && <span>{item.name}</span>}
+              <item.icon size={18} />
+              <span>{item.name}</span>
             </NavLink>
           ))}
         </nav>
 
-        <div className="sidebar-footer">
-          <button className="nav-link w-full border-none bg-transparent cursor-pointer" onClick={() => navigate('/')}>
-             <PlusCircle size={20} className="text-accent" />
-             {sidebarOpen && <span>Connect New DB</span>}
+        <div className="space-y-4 pt-6 border-t border-border mt-auto">
+          <button className="flex items-center gap-3 px-4 py-2 text-accent text-sm font-bold hover:translate-x-1 transition-transform border-none bg-transparent cursor-pointer" onClick={() => navigate('/')}>
+             <PlusCircle size={18} />
+             <span>Connect New DB</span>
           </button>
-          <button className="nav-link w-full border-none bg-transparent cursor-pointer text-red-400" onClick={handleLogout}>
-            <LogOut size={20} className="text-red-500" />
-            {sidebarOpen && <span className="text-red-500">Logout</span>}
+          <button className="flex items-center gap-3 px-4 py-2 text-red-600 text-sm font-bold hover:translate-x-1 transition-transform border-none bg-transparent cursor-pointer" onClick={handleLogout}>
+            <LogOut size={18} />
+            <span>Logout</span>
           </button>
         </div>
       </aside>
 
-      {/* Main Content */}
-      <main className="main-content">
-        <header className="mb-8 flex justify-between items-center">
+      {/* Main Content Area */}
+      <main className="flex-1 overflow-y-auto scroll-hide p-10">
+        <header className="flex justify-between items-start mb-12 px-2">
           <div>
-            <h1 className="text-2xl font-bold mb-1">
+            <h1 className="text-4xl font-bold tracking-tight mb-2 text-stone-950">
               Welcome back, Explorer ✨
             </h1>
-            <p className="text-zinc-400">
+            <p className="text-stone-500 text-lg">
               Your Intelligent Data Dictionary is synced and ready.
             </p>
           </div>
           
-          <button className="btn btn-primary flex items-center gap-2">
-            <Database size={18} />
+          <button className="btn-primary flex items-center gap-2">
+            <Database size={20} />
             Connect New Database
           </button>
         </header>
