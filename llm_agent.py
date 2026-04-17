@@ -17,9 +17,9 @@ class LLMAgent:
             self.model = "llama-3.3-70b-versatile"
             self.provider_name = "Groq (Llama 3.3 70B)"
         elif GEMINI_API_KEY and GEMINI_API_KEY != "<your_gemini_api_token_here>":
-            self.api_key = GEMINI_API_KEY
+            self.api_key = GEMINI_API_KEY.strip().strip('"').strip("'")
             self.endpoint = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
-            self.model = "gemini-2.5-flash"
+            self.model = "gemini-1.5-flash"
             self.provider_name = "Google Gemini"
         elif XAI_API_KEY and XAI_API_KEY != "<your_xai_grok_token_here>":
             self.api_key = XAI_API_KEY
@@ -93,8 +93,10 @@ class LLMAgent:
             "IMPORTANT Neo4j 5+ RULES: \n"
             "1. Do NOT use size() for pattern expressions. Use COUNT {(a)-[:REL]->()} instead.\n"
             "2. Avoid mixing aggregation functions like COUNT() with implicit grouping expressions in RETURN. "
-            "Always extract grouping and aggregations into a preceding WITH clause before calculating math. "
-            "Example: `MATCH (a) WITH count(a) AS total_a MATCH ()-[r]->() RETURN count(r) / total_a`."
+            "Always extract grouping and aggregations into a preceding WITH clause before calculating math. \n"
+            "3. Do NOT use `CALL db.schema()`. It does not exist. Use `CALL db.labels()` instead. \n"
+            "4. UNION ALL REQUIRES SAME COLUMN NAMES. If using UNION, ensure all branches have identical return keys.\n"
+            "Example for multiple counts: `MATCH (n) RETURN 'Nodes' as type, count(n) as count UNION ALL MATCH ()-[r]->() RETURN 'Relationships' as type, count(r) as count`."
         )
         user_prompt = f"Schema:\n{schema_str}\n\nQuestion:\n{question}"
         

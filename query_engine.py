@@ -118,18 +118,40 @@ class GraphQueryEngine:
         return self.connector.run_query(query, database=self.database)
 
     def get_schema_string(self):
+        schema_parts = []
+        
+        # 1. Try APOC Meta Schema
         try:
             query = "CALL apoc.meta.schema()"
             result = self.connector.run_query(query, database=self.database)
             if result:
-                return str(result)
-        except Exception as e:
-            # Fallback if APOC is not available
+                schema_parts.append(f"APOC Schema: {str(result)}")
+        except:
             pass
         
-        # Built-in fallback
-        query = "CALL db.schema.visualization()"
-        result = self.connector.run_query(query, database=self.database)
-        if result:
-            return str(result)
-        return "Schema unavailable."
+        # 2. Try DB Schema Visualization
+        try:
+            query = "CALL db.schema.visualization()"
+            result = self.connector.run_query(query, database=self.database)
+            if result:
+                schema_parts.append(f"Database Visual Schema: {str(result)}")
+        except:
+            pass
+
+        # 3. Manual Fallback (Always works in standard Neo4j/Aura)
+        if not schema_parts:
+            try:
+                # Get labels
+                labels_res = self.connector.run_query("CALL db.labels()", database=self.database)
+                labels = [r.get('label', r.get('name')) for r in labels_res] if labels_res else []
+                
+                # Get relationship types
+                rels_res = self.connector.run_query("CALL db.relationshipTypes()", database=self.database)
+                rels = [r.get('relationshipType', r.get('name')) for r in rels_res] if rels_res else []
+                
+                schema_parts.append(f"Node Labels: {', '.join(filter(None, labels))}")
+                schema_parts.append(f"Relationship Types: {', '.join(filter(None, rels))}")
+            except Exception as e:
+                return f"Schema unavailable. Error: {str(e)}"
+        
+        return "\n".join(schema_parts) if schema_parts else "Schema is empty."

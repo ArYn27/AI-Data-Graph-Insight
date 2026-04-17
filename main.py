@@ -30,7 +30,7 @@ def main():
                 print("Fetching schema...")
                 schema_str = engine.get_schema_string()
                 
-                print("Generating query with Grok...")
+                print(f"Generating query with {llm_agent.provider_name}...")
                 cypher_query = llm_agent.generate_cypher(question, schema_str)
                 
                 if cypher_query:
@@ -38,7 +38,7 @@ def main():
                     result = engine.run_custom_query(cypher_query)
                     
                     if result is not None:
-                        print("Analyzing results with Grok...")
+                        print(f"Analyzing results with {llm_agent.provider_name}...")
                         response = llm_agent.generate_response(question, cypher_query, result)
                         print(f"\n💡 Answer:\n{response}\n")
                         print("-" * 50)
