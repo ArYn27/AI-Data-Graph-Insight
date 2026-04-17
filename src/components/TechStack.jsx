@@ -18,9 +18,6 @@ const TechStack = () => {
              <div className="px-6 py-3 bg-white border border-border rounded-xl text-[10px] font-black uppercase tracking-[0.2em] text-accent">
                 Production Ready
              </div>
-             <div className="px-6 py-3 bg-white border border-border rounded-xl text-[10px] font-black uppercase tracking-[0.2em] text-stone-950">
-                V2.8-Flash
-             </div>
           </div>
         </div>
         
