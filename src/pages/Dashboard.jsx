@@ -58,7 +58,7 @@ const Dashboard = () => {
       <aside className="w-64 bg-sidebar border-r border-border flex flex-col p-6">
         <div className="flex items-center gap-2 mb-12 px-2 cursor-pointer" onClick={() => navigate('/')}>
           <Database className="text-accent" size={24} />
-          <span className="font-bold text-lg tracking-tight text-stone-950">DataLens AI</span>
+          <span className="font-bold text-lg tracking-tight text-stone-950">InsightGraph AI</span>
         </div>
 
         <nav className="flex-1 space-y-2">

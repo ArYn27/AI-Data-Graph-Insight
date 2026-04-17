@@ -7,9 +7,9 @@ const Footer = () => {
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-start gap-12 mb-16">
           <div className="max-w-xs">
-            <div className="flex items-center gap-2 mb-6 text-stone-950 font-black text-xl tracking-tighter uppercase italic">
-              <Database className="text-orange-700" size={24} />
-              <span>DataLens <span className="text-orange-700">AI</span></span>
+            <div className="flex items-center gap-2 mb-8 uppercase italic font-black text-xl tracking-tighter">
+              <Database className="text-accent" size={24} />
+              <span className="text-stone-950 font-black">InsightGraph <span className="text-accent">AI</span></span>
             </div>
             <p className="text-stone-600 text-sm font-medium leading-relaxed">
               Advancing deterministic data intelligence through graph-based modeling and explainable AI insights.
@@ -20,24 +20,24 @@ const Footer = () => {
             <div className="space-y-4">
               <h4 className="font-bold text-stone-900 uppercase tracking-widest text-xs">Product</h4>
               <nav className="flex flex-col gap-2 text-stone-600">
-                <a href="#features" className="hover:text-orange-700 transition-colors">Features</a>
-                <a href="#architecture" className="hover:text-orange-700 transition-colors">Architecture</a>
-                <a href="/dashboard/overview" className="hover:text-orange-700 transition-colors">View Demo</a>
+                <a href="#features" className="hover:text-accent transition-colors">Features</a>
+                <a href="#architecture" className="hover:text-accent transition-colors">Architecture</a>
+                <a href="/dashboard/overview" className="hover:text-accent transition-colors">View Demo</a>
               </nav>
             </div>
             <div className="space-y-4">
               <h4 className="font-bold text-stone-900 uppercase tracking-widest text-xs">Dev Resources</h4>
               <nav className="flex flex-col gap-2 text-stone-600">
-                <a href="https://github.com/ArYn27/AI-Data-Graph-Insight" target="_blank" className="hover:text-orange-700 transition-colors">Documentation</a>
-                <a href="https://github.com/ArYn27/AI-Data-Graph-Insight" target="_blank" className="hover:text-orange-700 transition-colors">API Reference</a>
-                <a href="https://github.com/ArYn27/AI-Data-Graph-Insight" target="_blank" className="hover:text-orange-700 transition-colors">GitHub</a>
+                <a href="https://github.com/ArYn27/AI-Data-Graph-Insight" target="_blank" className="hover:text-accent transition-colors">Documentation</a>
+                <a href="https://github.com/ArYn27/AI-Data-Graph-Insight" target="_blank" className="hover:text-accent transition-colors">API Reference</a>
+                <a href="https://github.com/ArYn27/AI-Data-Graph-Insight" target="_blank" className="hover:text-accent transition-colors">GitHub</a>
               </nav>
             </div>
             <div className="space-y-4">
               <h4 className="font-bold text-stone-900 uppercase tracking-widest text-xs">Connect</h4>
               <div className="flex gap-4 text-stone-600">
-                <Globe size={18} className="hover:text-orange-700 cursor-pointer" />
-                <ArrowRight size={18} className="hover:text-orange-700 cursor-pointer" />
+                <Globe size={18} className="hover:text-accent cursor-pointer" />
+                <ArrowRight size={18} className="hover:text-accent cursor-pointer" />
               </div>
             </div>
           </div>
