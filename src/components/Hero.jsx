@@ -2,12 +2,18 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Play } from 'lucide-react';
 import { motion } from 'framer-motion';
+import RotatingEarth from './RotatingEarth';
 
 const Hero = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="relative pt-40 pb-20 overflow-hidden">
+    <section className="relative pt-40 pb-20 overflow-hidden min-h-[900px] flex items-center">
+      {/* Background Rotating Earth */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[800px] aspect-square flex items-center justify-center -z-10 pointer-events-none">
+        <RotatingEarth width={800} height={800} />
+      </div>
+
       {/* Background Decorative Elements */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-[radial-gradient(circle_at_center,_rgba(188,158,130,0.1)_0%,transparent_70%)] pointer-events-none" />
       <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-border to-transparent" />
@@ -23,7 +29,7 @@ const Hero = () => {
               Understand your data <br />
               <span className="text-accent italic">at the speed of thought.</span>
             </h1>
-            <p className="text-stone-500 text-xl md:text-2xl leading-relaxed mb-12 max-w-2xl mx-auto font-medium">
+            <p className="text-stone- stone-500 text-xl md:text-2xl leading-relaxed mb-12 max-w-2xl mx-auto font-medium">
               The explainable intelligence layer for enterprise databases. 
               Visualize relationships, audit quality, and query schemas with AI accuracy.
             </p>
@@ -36,7 +42,7 @@ const Hero = () => {
             className="flex flex-col sm:flex-row items-center justify-center gap-6"
           >
             <button 
-              className="group relative px-10 py-5 bg-accent text-black font-black rounded-2xl transition-all hover:scale-105 shadow-[0_0_30px_rgba(11,221,117,0.3)]"
+              className="group relative px-10 py-5 bg-accent text-black font-black rounded-2xl transition-all hover:scale-105 shadow-[0_0_30px_rgba(188,158,130,0.4)]"
               onClick={() => navigate('/auth')}
             >
               <span className="flex items-center gap-3">

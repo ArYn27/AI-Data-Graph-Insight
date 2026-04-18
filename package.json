@@ -12,6 +12,7 @@
   "dependencies": {
     "@neondatabase/neon-js": "^0.2.0-beta.1",
     "axios": "^1.15.0",
+    "d3": "^7.9.0",
     "framer-motion": "^12.38.0",
     "lucide-react": "^1.8.0",
     "react": "^19.2.4",

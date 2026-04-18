@@ -11,7 +11,7 @@
 
 @layer base {
   body {
-    @apply bg-bg text-stone-900 antialiased selection:bg-accent/30 selection:text-stone-900;
+    @apply antialiased selection:bg-accent/30 selection:text-stone-900 bg-bg text-stone-900;
     font-family: 'Inter', system-ui, sans-serif;
     background-image: 
       radial-gradient(circle at 1px 1px, rgba(166, 139, 109, 0.1) 1px, transparent 0);
@@ -22,17 +22,23 @@
     font-family: 'Outfit', sans-serif;
     @apply text-stone-950;
   }
+  * {
+    @apply border-border;
+  }
+  html {
+    @apply font-sans;
+  }
 }
 
 @layer components {
   .btn-primary {
     @apply bg-accent text-white font-black py-4 px-8 rounded-2xl transition-all hover:scale-105 active:scale-95 shadow-md shadow-accent/20 disabled:opacity-50 cursor-pointer flex items-center justify-center gap-2;
   }
-  
+
   .btn-secondary {
     @apply bg-white border border-border text-stone-600 font-bold py-4 px-8 rounded-2xl transition-all hover:bg-stone-50 active:scale-95 flex items-center justify-center gap-2;
   }
-  
+
   .glass-card {
     @apply bg-white border border-border rounded-3xl overflow-hidden shadow-sm;
   }
