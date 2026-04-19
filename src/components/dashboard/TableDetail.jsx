@@ -29,7 +29,11 @@ const TableDetail = () => {
   const [activeTab, setActiveTab] = useState('schema'); 
   const [tableData, setTableData] = useState([]);
   const [isDataLoading, setIsDataLoading] = useState(false);
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [dataError, setDataError] = useState(null);
+  const [offset, setOffset] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const PAGE_SIZE = 50;
 
   useEffect(() => {
     const fetchTableDetail = async () => {
@@ -58,27 +62,33 @@ const TableDetail = () => {
     fetchTableDetail();
   }, [slug]);
 
-  const fetchActualData = async () => {
-    if (!table || tableData.length > 0) return;
-    
-    setIsDataLoading(true);
+  const fetchActualData = async (currentOffset = 0, append = false) => {
+    if (!table) return;
+    if (currentOffset === 0) {
+      setIsDataLoading(true);
+    } else {
+      setIsFetchingMore(true);
+    }
     setDataError(null);
     try {
-      const result = await apiService.getTableData(table.name);
+      const result = await apiService.getTableData(table.name, PAGE_SIZE, currentOffset);
       if (result && result.rows) {
-        setTableData(result.rows);
+        setTableData(prev => append ? [...prev, ...result.rows] : result.rows);
+        setOffset(currentOffset + result.rows.length);
+        setHasMore(result.has_more);
       }
     } catch (error) {
       console.error('Error fetching table data:', error);
       setDataError(error.response?.data?.detail || "Failed to fetch table data. Make sure the database is connected.");
     } finally {
       setIsDataLoading(false);
+      setIsFetchingMore(false);
     }
   };
 
   useEffect(() => {
-    if (activeTab === 'data') {
-      fetchActualData();
+    if (activeTab === 'data' && table && tableData.length === 0) {
+      fetchActualData(0, false);
     }
   }, [activeTab, table]);
 
@@ -247,13 +257,20 @@ const TableDetail = () => {
            <div className="px-10 py-8 border-b border-border bg-stone-50/50 flex items-center justify-between">
               <h3 className="font-bold text-lg text-stone-950 flex items-center gap-2">
                 <LayoutGrid size={20} className="text-stone-400" />
-                Data Preview (Sample)
+                Data Preview
               </h3>
               <div className="flex items-center gap-4">
                  {isDataLoading && <Loader2 size={16} className="animate-spin text-accent" />}
-                 <span className="text-[10px] bg-white border border-border px-3 py-1 rounded-full font-bold text-stone-500 uppercase tracking-widest">
-                    Top 50 Rows
-                 </span>
+                 {tableData.length > 0 && (
+                   <span className="text-[10px] bg-white border border-border px-3 py-1 rounded-full font-bold text-stone-500 uppercase tracking-widest">
+                     {tableData.length} Rows Loaded
+                   </span>
+                 )}
+                 {!isDataLoading && hasMore && (
+                   <span className="text-[10px] bg-stone-100 border border-border px-3 py-1 rounded-full font-bold text-stone-400 uppercase tracking-widest">
+                     More Available
+                   </span>
+                 )}
               </div>
            </div>
            
@@ -271,7 +288,7 @@ const TableDetail = () => {
                     <p className="text-xs">{dataError}</p>
                   </div>
                   <button 
-                    onClick={fetchActualData}
+                    onClick={() => fetchActualData(0, false)}
                     className="mt-4 px-6 py-2 bg-stone-100 border border-border rounded-xl text-xs font-bold hover:bg-stone-200 transition-colors"
                   >
                     Retry Connection
@@ -279,10 +296,11 @@ const TableDetail = () => {
                </div>
              ) : tableData.length > 0 ? (
                <div className="min-w-full inline-block align-middle">
-                 <div className="overflow-hidden border-b border-border">
+                 <div className="overflow-hidden">
                     <table className="min-w-full divide-y divide-border">
-                      <thead className="bg-stone-50/50">
+                      <thead className="bg-stone-50/50 sticky top-0">
                         <tr>
+                          <th className="px-4 py-4 text-left text-[10px] font-black text-stone-400 uppercase tracking-[0.15em] border-r border-border w-12">#</th>
                           {Object.keys(tableData[0]).map((key) => (
                             <th key={key} className="px-6 py-4 text-left text-[10px] font-black text-stone-400 uppercase tracking-[0.15em] border-r border-border last:border-r-0">
                               {key}
@@ -293,6 +311,7 @@ const TableDetail = () => {
                       <tbody className="bg-white divide-y divide-border">
                         {tableData.map((row, i) => (
                           <tr key={i} className="hover:bg-stone-50 transition-colors">
+                            <td className="px-4 py-4 text-[10px] font-mono text-stone-300 border-r border-border">{i + 1}</td>
                             {Object.values(row).map((val, j) => (
                               <td key={j} className="px-6 py-4 whitespace-nowrap text-sm text-stone-600 border-r border-border last:border-r-0 max-w-xs truncate">
                                 {val === null ? <span className="italic text-stone-300">null</span> : String(val)}
@@ -302,6 +321,31 @@ const TableDetail = () => {
                         ))}
                       </tbody>
                     </table>
+                 </div>
+
+                 {/* Load More Footer */}
+                 <div className="px-10 py-6 border-t border-border bg-stone-50/50 flex items-center justify-between">
+                   <span className="text-xs text-stone-400 font-medium">
+                     Showing <span className="font-bold text-stone-700">{tableData.length}</span> rows
+                     {!hasMore && " — all records loaded"}
+                   </span>
+                   {hasMore ? (
+                     <button
+                       onClick={() => fetchActualData(offset, true)}
+                       disabled={isFetchingMore}
+                       className="flex items-center gap-2 px-6 py-2.5 bg-stone-900 text-white text-xs font-bold rounded-xl hover:bg-stone-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                     >
+                       {isFetchingMore ? (
+                         <><Loader2 size={14} className="animate-spin" /> Fetching...</>
+                       ) : (
+                         <>Load {PAGE_SIZE} More Rows <ArrowRight size={14} /></>
+                       )}
+                     </button>
+                   ) : (
+                     <span className="text-[10px] font-black uppercase tracking-widest text-accent px-4 py-2 bg-accent/5 border border-accent/20 rounded-xl">
+                       ✓ All Records Loaded
+                     </span>
+                   )}
                  </div>
                </div>
              ) : (

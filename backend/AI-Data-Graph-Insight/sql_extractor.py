@@ -40,21 +40,18 @@ def extract_schema(db_uri: str):
         logging.error(f"Error extracting SQL schema: {e}")
         raise e
 
-def fetch_table_rows(db_uri: str, table_name: str, limit: int = 50):
+def fetch_table_rows(db_uri: str, table_name: str, limit: int = 50, offset: int = 0):
     """
-    Fetches the first N rows from a specific SQL table.
+    Fetches rows from a specific SQL table with pagination support.
     """
     try:
         from sqlalchemy import text
         engine = create_engine(db_uri)
         with engine.connect() as connection:
-            # Use text() for safe query execution
-            query = text(f"SELECT * FROM {table_name} LIMIT {limit}")
+            query = text(f"SELECT * FROM {table_name} LIMIT {limit} OFFSET {offset}")
             result = connection.execute(query)
-            
             rows = []
             for row in result:
-                # Convert Row object to dict
                 rows.append(row._asdict())
             return rows
     except Exception as e:

@@ -220,15 +220,15 @@ def api_build_graph(request: BuildGraphRequest):
         raise HTTPException(status_code=500, detail=f"Neo4j Population Error: {str(e)}")
 
 @app.get("/api/table_data/{table_name}")
-def get_table_data(table_name: str):
-    """Returns sample data rows from the actual SQL table."""
+def get_table_data(table_name: str, limit: int = 50, offset: int = 0):
+    """Returns paginated data rows from the actual SQL table."""
     global CURRENT_SQL_URI
     if not CURRENT_SQL_URI:
         raise HTTPException(status_code=400, detail="No SQL database connected. Please connect a DB first.")
     
     try:
-        rows = fetch_table_rows(CURRENT_SQL_URI, table_name)
-        return {"table": table_name, "rows": rows}
+        rows = fetch_table_rows(CURRENT_SQL_URI, table_name, limit=limit, offset=offset)
+        return {"table": table_name, "rows": rows, "offset": offset, "limit": limit, "has_more": len(rows) == limit}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Data Fetch Error: {str(e)}")
 

@@ -37,9 +37,9 @@ export const apiService = {
     return response.data;
   },
 
-  // Fetch table data
-  getTableData: async (tableName) => {
-    const response = await api.get(`/api/table_data/${tableName}`);
+  // Fetch table data with pagination
+  getTableData: async (tableName, limit = 50, offset = 0) => {
+    const response = await api.get(`/api/table_data/${tableName}`, { params: { limit, offset } });
     return response.data;
   },
 
